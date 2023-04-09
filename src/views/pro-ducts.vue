@@ -1,7 +1,7 @@
 <script setup>
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 //遠端資料
 let products=ref([])
 let pagination=ref({})
@@ -15,14 +15,21 @@ const Getproducts = () =>{
 } 
 Getproducts()
 
-const productModal = ref(null)
+const modal = ref(null)
+function aa (){
+  modal.value.myModal_show()
+}
+onMounted(()=>{
+  aa 
+})
+
 </script>
 
 
 <template>
   <div class="text-end mt-3">
     <button class="btn btn-primary" type="button"
-    @click="productModal.value.myModal_show()">
+    @click="aa">
       增加一個產品
     </button>
   </div>
@@ -60,5 +67,5 @@ const productModal = ref(null)
     </tr>
   </tbody>
 </table>
-<product ref="productModal"></product>
+<product  ref="modal"></product>
 </template>
