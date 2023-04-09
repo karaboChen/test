@@ -9,6 +9,18 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/Login-in.vue')
     },
+    {
+      path: '/dash',
+      name: 'dash',
+      component: () => import('../views/Dash-board.vue'),
+      //巢狀路由
+      children:[
+        {
+          path: 'products',
+          component: () => import('../views/pro-ducts.vue')
+        }
+      ]
+    },
   ]
 })
 
