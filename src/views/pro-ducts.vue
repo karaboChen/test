@@ -1,11 +1,14 @@
 <script setup>
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
-import { ref,onMounted } from 'vue'
+import { ref } from 'vue'
 //遠端資料
-let products=ref([])
-let pagination=ref({})
+const products=ref([])
+const pagination=ref({})
+const  modify = ref(false)
 
+
+//頁面讀取
 const Getproducts = () =>{
   api.get('api/karabo-api-cake/admin/products')
   .then((res)=>{
@@ -15,21 +18,44 @@ const Getproducts = () =>{
 } 
 Getproducts()
 
+const tempProduct=ref({})
 const modal = ref(null)
-function aa (){
+
+function newItem(isNew,item){
+  console.log({...item})
+  if (isNew)
+  {
+    modify.value=false
+    tempProduct.value={}
+  } else
+  {
+    modify.value=true
+    tempProduct.value={...item}
+  }
   modal.value.myModal_show()
 }
-onMounted(()=>{
-  aa 
-})
+//新增商品 或是修改商品
+function updateProduct (item){
+  //編輯商品
+  if(modify.value === true){
+    api.put(`api/karabo-api-cake/admin/product/${item.id}`)
+  }
+  else{
+ //新增商品
+  tempProduct.value=item
+   api.post('api/karabo-api-cake/admin/product',{data:tempProduct.value})
+  }
+  modal.value.myModal_hide()
+  Getproducts()
+}
 
 </script>
 
 
 <template>
   <div class="text-end mt-3">
-    <button class="btn btn-primary" type="button"
-    @click="aa">
+    <button class="btn btn-primary" type="button" 
+    @click="newItem(true)">
       增加一個產品
     </button>
   </div>
@@ -60,12 +86,12 @@ onMounted(()=>{
       </td>
       <td>
         <div class="btn-group">
-          <button class="btn btn-outline-primary btn-sm">編輯</button>
+          <button class="btn btn-outline-primary btn-sm"  @click="newItem(false,item)">編輯</button>
           <button class="btn btn-outline-danger btn-sm">刪除</button>
         </div>
       </td>
     </tr>
   </tbody>
 </table>
-<product  ref="modal"></product>
+<product ref="modal" :product="tempProduct" @update-product="updateProduct"></product>
 </template>
