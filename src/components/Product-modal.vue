@@ -1,18 +1,16 @@
 <script setup>
+import api from '../api/backend.js'
 import Modal from 'bootstrap/js/dist/modal';
-import { ref, onMounted,defineProps,watch,defineEmits } from 'vue'
+import { ref, onMounted,watch } from 'vue'
 const myModal = ref({}) //回傳物件
 const modal = ref(null);
 const tempProduct =ref({})
+const fileInput=ref(null)
 const emits = defineEmits(['update-product'])
-
 function updateproduct() {
   emits('update-product', tempProduct.value);
 }
 
-// const emits = defineEmits({
-//   'update-parent-data': (newData) => typeof newData === 'string',
-// });
 const props = defineProps({
   product: {
     type: Object,
@@ -44,6 +42,20 @@ defineExpose({
   myModal_hide,
 })
 
+function uploadFile(){
+ const uploadFile= fileInput.value.files[0]
+ const formData = new FormData()
+ formData.append('file-to-upload',uploadFile)
+ api.post('/api/karabo-api-cake/admin/upload',formData)
+ .then((res)=>{
+  console.log(res.data)
+  if(res.data.success){
+    tempProduct.value.imageUrl=res.data.imageUrl
+    fileInput.value.value=''
+  }
+ })
+}
+
 </script>
 
 <template>
@@ -70,7 +82,7 @@ defineExpose({
                 <label for="customFile" class="form-label">或 上傳圖片
                   <i class="fas fa-spinner fa-spin"></i>
                 </label>
-                <input type="file" id="customFile" class="form-control">
+                <input type="file" id="customFile" class="form-control" @change="uploadFile" ref="fileInput">
               </div>
               <img class="img-fluid" alt="" :src="tempProduct.imageUrl">
               <!-- 延伸技巧，多圖 -->

@@ -1,30 +1,39 @@
 <script setup>
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
-import { ref } from 'vue'
+import {ref,onMounted,watch } from 'vue'
 //遠端資料
 const products=ref([])
 const pagination=ref({})
 const  modify = ref(false)
-
-
-//頁面讀取
-const Getproducts = () =>{
-  api.get('api/karabo-api-cake/admin/products')
-  .then((res)=>{
-    products.value = res.data.products
-    pagination.value = res.data.pagination
-  })
-} 
-Getproducts()
-
 const tempProduct=ref({})
 const modal = ref(null)
+const isLoading =ref(true)
+//const isLoading =ref(false)
 
+//頁面讀取
+async function Getproducts() {
+  // isLoading.value=true
+  const res = await api.get('api/karabo-api-cake/admin/products')
+  // isLoading.value=false
+  isLoading.value=false
+  products.value = res.data.products
+  pagination.value = res.data.pagination
+}
+
+onMounted(()=>{
+Getproducts()
+})
+
+//更新畫面
+watch(products, () => {
+  Getproducts()
+})
+//判斷是新增 還是 編輯
 function newItem(isNew,item){
-  console.log({...item})
   if (isNew)
   {
+    console.log(1)
     modify.value=false
     tempProduct.value={}
   } else
@@ -38,7 +47,7 @@ function newItem(isNew,item){
 function updateProduct (item){
   //編輯商品
   if(modify.value === true){
-    api.put(`api/karabo-api-cake/admin/product/${item.id}`)
+    api.put(`api/karabo-api-cake/admin/product/${item.id}`,{data:tempProduct.value})
   }
   else{
  //新增商品
@@ -46,13 +55,17 @@ function updateProduct (item){
    api.post('api/karabo-api-cake/admin/product',{data:tempProduct.value})
   }
   modal.value.myModal_hide()
-  Getproducts()
+}
+
+function del(item){
+  api.delete(`/api/karabo-api-cake/admin/product/${item}`)
 }
 
 </script>
 
 
 <template>
+<Loading :active="isLoading"></Loading>
   <div class="text-end mt-3">
     <button class="btn btn-primary" type="button" 
     @click="newItem(true)">
@@ -87,7 +100,7 @@ function updateProduct (item){
       <td>
         <div class="btn-group">
           <button class="btn btn-outline-primary btn-sm"  @click="newItem(false,item)">編輯</button>
-          <button class="btn btn-outline-danger btn-sm">刪除</button>
+          <button class="btn btn-outline-danger btn-sm" @click="del(item.id)">刪除</button>
         </div>
       </td>
     </tr>
