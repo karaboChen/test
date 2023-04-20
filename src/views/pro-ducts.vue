@@ -45,6 +45,7 @@ function newItem(isNew,item){
 }
 //新增商品 或是修改商品
 function updateProduct (item){
+  isLoading.value=true
   //編輯商品
   if(modify.value === true){
     api.put(`api/karabo-api-cake/admin/product/${item.id}`,{data:tempProduct.value})
@@ -58,6 +59,7 @@ function updateProduct (item){
 }
 
 function del(item){
+  isLoading.value=true
   api.delete(`/api/karabo-api-cake/admin/product/${item}`)
 }
 
