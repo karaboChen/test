@@ -1,7 +1,7 @@
 <script setup>
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
-import {ref,onMounted,watch } from 'vue'
+import {ref,onMounted,inject } from 'vue'
 //遠端資料
 const products=ref([])
 const pagination=ref({})
@@ -10,25 +10,21 @@ const tempProduct=ref({})
 const modal = ref(null)
 const isLoading =ref(true)
 //const isLoading =ref(false)
-
+const { emitter } = inject('emitter')
+console.log(emitter)
 //頁面讀取
 async function Getproducts() {
-  // isLoading.value=true
   const res = await api.get('api/karabo-api-cake/admin/products')
-  // isLoading.value=false
-  isLoading.value=false
   products.value = res.data.products
   pagination.value = res.data.pagination
+  isLoading.value=false
 }
 
 onMounted(()=>{
-Getproducts()
-})
-
-//更新畫面
-watch(products, () => {
   Getproducts()
 })
+
+
 //判斷是新增 還是 編輯
 function newItem(isNew,item){
   if (isNew)
@@ -49,11 +45,19 @@ function updateProduct (item){
   //編輯商品
   if(modify.value === true){
     api.put(`api/karabo-api-cake/admin/product/${item.id}`,{data:tempProduct.value})
+    .then(()=>{
+      Getproducts()
+      isLoading.value=false
+    })
   }
   else{
  //新增商品
   tempProduct.value=item
    api.post('api/karabo-api-cake/admin/product',{data:tempProduct.value})
+   .then(()=>{
+      Getproducts()
+      isLoading.value=false
+    })
   }
   modal.value.myModal_hide()
 }
@@ -61,6 +65,10 @@ function updateProduct (item){
 function del(item){
   isLoading.value=true
   api.delete(`/api/karabo-api-cake/admin/product/${item}`)
+  .then(()=>{
+    Getproducts()
+    isLoading.value=false
+    })
 }
 
 </script>
