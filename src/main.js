@@ -15,5 +15,5 @@ const app = createApp(App)
 app.use(VueAxios, axios)
 app.use(createPinia())
 app.use(router)
-app.component('Loading', Loading);
+app.component('Load-ing', Loading);
 app.mount('#app')

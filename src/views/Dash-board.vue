@@ -1,5 +1,6 @@
 <script setup>
 import api from '../api/backend.js'
+import ToastMessages from '../components/ToastMessages.vue';
 import emitter from '@/method/emiiter';
 import { useRouter } from 'vue-router'
 import { provide } from 'vue'
@@ -19,6 +20,7 @@ provide('emitter',emitter)
 <template>
   <Navbar />
   <div class="container-fluid">
+    <ToastMessages></ToastMessages>
     <RouterView />
   </div>
 </template>
