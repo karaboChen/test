@@ -1,6 +1,8 @@
 <script setup>
+import Pagination from'../components/Pagi-nation.vue'
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
+import DelModal from '@/components/DelModal.vue';
 import { ref, onMounted, inject } from 'vue'
 //遠端資料
 const products = ref([])
@@ -8,13 +10,14 @@ const pagination = ref({})
 const modify = ref(false)
 const tempProduct = ref({})
 const modal = ref(null)
+const delModal = ref(null)
 const isLoading = ref(true)
-//const isLoading =ref(false)
-const { emitter } = inject('emitter')
-console.log(emitter)
+const emitter = inject('emitter')
+
+
 //頁面讀取
-async function Getproducts() {
-  const res = await api.get('api/karabo-api-cake/admin/products')
+async function Getproducts(page=1) {
+  const res = await api.get(`api/karabo-api-cake/admin/products/?page=${page}`)
   products.value = res.data.products
   pagination.value = res.data.pagination
   isLoading.value = false
@@ -28,13 +31,13 @@ onMounted(() => {
 //判斷是新增 還是 編輯
 function newItem(isNew, item) {
   if (isNew) {
-    console.log(1)
     modify.value = false
     tempProduct.value = {}
   } else {
     modify.value = true
     tempProduct.value = { ...item }
   }
+
   modal.value.myModal_show()
 }
 //新增商品 或是修改商品
@@ -45,7 +48,6 @@ function updateProduct(item) {
     api.put(`api/karabo-api-cake/admin/product/${item.id}`, { data: tempProduct.value })
       .then(() => {
         Getproducts()
-        isLoading.value = false
       })
   }
   else {
@@ -66,7 +68,6 @@ function updateProduct(item) {
             content: res.data.message.join('、'),
           });
         }
-        isLoading.value = false
       })
   }
   modal.value.myModal_hide()
@@ -77,8 +78,13 @@ function del(item) {
   api.delete(`/api/karabo-api-cake/admin/product/${item}`)
     .then(() => {
       Getproducts()
-      isLoading.value = false
     })
+}
+async function delProduct(){
+const res  = api.delete(`api/karabo-api-cake/admin/product/${tempProduct.value.id}`)
+console.log(res.data);
+delModal.value.myModal_hide()
+await Getproducts()
 }
 
 </script>
@@ -107,10 +113,10 @@ function del(item) {
         <td>{{ item.category }}</td>
         <td>{{ item.title }}</td>
         <td class="text-right">
-          {{ item.origin_price }}
+          {{ $filters.currency(item.origin_price) }}
         </td>
         <td class="text-right">
-          {{ item.price }}
+          {{ $filters.currency(item.price) }}
         </td>
         <td>
           <span class="text-success" v-if="item.is_enabled">啟用</span>
@@ -125,5 +131,7 @@ function del(item) {
       </tr>
     </tbody>
   </table>
+  <Pagination :pages="pagination" @update-Page="Getproducts"></Pagination>
   <product ref="modal" :product="tempProduct" @update-product="updateProduct"></product>
+  <DelModal :item="tempProduct" ref="delModal" @del-item="delProduct"/>
 </template>

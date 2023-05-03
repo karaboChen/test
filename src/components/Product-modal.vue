@@ -1,7 +1,7 @@
 <script setup>
 import api from '../api/backend.js'
 import Modal from 'bootstrap/js/dist/modal';
-import { ref, onMounted,watch } from 'vue'
+import { ref,watch,onMounted } from 'vue'
 const myModal = ref({}) //回傳物件
 const modal = ref(null);
 const tempProduct =ref({})
@@ -36,7 +36,7 @@ const myModal_hide = () => {
 onMounted(() => {
   myModal.value = new Modal(modal.value)
 })
-//
+
 defineExpose({
   myModal_show,
   myModal_hide,
