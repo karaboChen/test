@@ -6,7 +6,6 @@ const  myModal = ref(null)
 const props = defineProps({
   item: {
     type: Object,
-    default:() => ({}),
     // required: true
   }
 });

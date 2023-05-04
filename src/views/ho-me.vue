@@ -1,3 +1,11 @@
+<script setup>
+
+</script>
+
 <template>
-  首頁
+  1234
 </template>
+
+<style lang="css" scoped>
+
+</style>

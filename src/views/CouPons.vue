@@ -12,6 +12,7 @@ const tempCoupon=ref({
   percent: 100,
   code: '',
 })
+
 const isLoading =ref(false)
 const is_New =ref(false)
 
@@ -35,13 +36,14 @@ function  openDelCouponModal(item){
 async function getCoupons(){
   isLoading.value = true;
   const res = await api.get(`api/karabo-api-cake/admin/coupons`)
+  console.log(res)
   coupons.value = res.data.coupons;
   isLoading.value = false;
 }
 
 async function updateCoupon(tempCoupon){
    if (is_New.value){
-    const res = await api.post(`api/karabo-api-cake/admin/coupon`, { data: tempCoupon })
+    const res = await api.post(`api/karabo-api-cake/admin/coupon`, { data: tempCoupon.value })
     console.log(res, tempCoupon);
     // this.$httpMessageState(response, '新增優惠券');
     await getCoupons();

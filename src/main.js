@@ -7,12 +7,12 @@ import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import App from './App.vue'
 import router from './router'
+import { register } from 'swiper/element/bundle';
 import { currency,date } from './method/calc';
-import 'bootstrap/scss/bootstrap.scss';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+import "@/styles/rest.css";
 const app = createApp(App)
+app.use(register);
 //加入全域使用方法
 app.config.globalProperties.$filters = {
   currency,date
