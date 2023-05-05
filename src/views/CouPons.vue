@@ -16,7 +16,7 @@ const tempCoupon=ref({
 const isLoading =ref(false)
 const is_New =ref(false)
 
-function  openCouponModal(isNew, item){
+function openCouponModal(isNew, item){
 is_New.value = isNew;
   if (is_New.value) {
     tempCoupon.value = {
@@ -25,36 +25,36 @@ is_New.value = isNew;
   } else {
     tempCoupon.value = { ...item };
   }
-  couponModal.value.showModal();
+  couponModal.value.myModal_show();
 }
 
 function  openDelCouponModal(item){
   tempCoupon.value = { ...item };
-  delModal.value.showModal();
+  delModal.value.myModal_show();
 }
 
 async function getCoupons(){
   isLoading.value = true;
   const res = await api.get(`api/karabo-api-cake/admin/coupons`)
-  console.log(res)
+  console.log("優惠券",res)
   coupons.value = res.data.coupons;
   isLoading.value = false;
 }
 
 async function updateCoupon(tempCoupon){
    if (is_New.value){
-    const res = await api.post(`api/karabo-api-cake/admin/coupon`, { data: tempCoupon.value })
+    const res = await api.post(`api/karabo-api-cake/admin/coupon`, { data: tempCoupon })
     console.log(res, tempCoupon);
     // this.$httpMessageState(response, '新增優惠券');
     await getCoupons();
-   couponModal.value.hideModal();
+   couponModal.value.myModal_hide();
    }
    else{ 
-    const res = await api.put(`api/karabo-api-cake/admin/coupon/${tempCoupon.value.id}`,{ data: tempCoupon.value })
+    const res = await api.put(`api/karabo-api-cake/admin/coupon/${tempCoupon.value.id}`,{ data: tempCoupon })
     console.log(res);
    // this.$httpMessageState(response, '新增優惠券');
     await  getCoupons();
-    couponModal.value.hideModal();
+    couponModal.value.myModal_hide();
    }
 }
 
@@ -63,15 +63,13 @@ async function delCoupon(){
  const res = await api.delete(`api/karabo-api-cake/admin/coupon/${tempCoupon.value.id}`)
  console.log(res,tempCoupon.value)
 // this.$httpMessageState(res, '刪除優惠券');
-delModal.value.hideModal();
+delModal.value.myModal_hide();
 await getCoupons();
 }
 
 getCoupons()
-
+console.log(coupons.value)
 </script>
-
-
 
 
 <template>
@@ -114,8 +112,7 @@ getCoupons()
       </tr>
       </tbody>
     </table>
-    <CouponModal :coupon="tempCoupon" ref="couponModal"
-    @update-coupon="updateCoupon"/>
+    <CouponModal :coupon="tempCoupon" ref="couponModal" @update-coupon="updateCoupon"/>
     <DelModal :item="tempCoupon" ref="delModal" @del-item="delCoupon"/>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import Pagination from'../components/Pagi-nation.vue'
+import Pagination from'../components/PagiNation.vue'
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
 import DelModal from '@/components/DelModal.vue';

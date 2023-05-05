@@ -3,7 +3,7 @@ import Modal from 'bootstrap/js/dist/modal';
 import {ref,watch,onMounted} from 'vue'
 const modal = ref(null); //底下的模板
 const myModal = ref({}) //回傳物件
-const tempCoupon=ref(null)
+const tempCoupon=ref({})
 const due_date= ref(null)
 const myModal_show = () => {
   myModal.value.show()
@@ -37,10 +37,8 @@ watch(
   () => props.coupon, 
   () => {
     tempCoupon.value=props.coupon
-    console.log(tempCoupon.value.due_date);
-    const dateAndTime = new Date(tempCoupon.value.due_date * 1000)
-        .toISOString().split('T');
-  due_date.value = dateAndTime;
+    const dateAndTime = new Date(tempCoupon.value.due_date * 1000).toISOString().split('T');
+  due_date.value = dateAndTime[0];
   },
   { deep: true }
 );
@@ -54,8 +52,6 @@ watch(
 );
 
 </script>
-
-
 
 
 <template>

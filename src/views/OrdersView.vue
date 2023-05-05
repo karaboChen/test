@@ -3,10 +3,10 @@
 import {ref} from 'vue'
 import OrderModal from '@/components/OrderModal.vue';
 import DelModal from '@/components/DelModal.vue';
-import Pagination from '@/components/Pagi-nation.vue';
+import Pagination from '@/components/PagiNation.vue';
 import api from '../api/backend.js'
 const orderModal= ref(null)
-const  delModal = ref(null)
+const delModal = ref(null)
 const orders=ref({})
 const is_New=ref(false)
 const pagination=ref({})
@@ -16,24 +16,26 @@ const current_Page=ref(1)
 
 function getOrders(currentPage = 1){
   current_Page.value = currentPage;
-  const res = api.get(`api/karabo-api-cake/admin//orders?page=${currentPage}`)
+  const res = api.get(`api/karabo-api-cake/admin/orders?page=${currentPage}`)
   isLoading.value = true;
   orders.value = res.data.orders;
   pagination.value = res.data.pagination;
   isLoading.value = false;
-  console.log(res);
+ 
 }
+
+
+
 
 function openModal(item) {
   tempOrder.value = { ...item };
   is_New.value = false;
-  orderModal.value.showModal();
+  orderModal.value.myModal_show();
  }
 
 function openDelOrderModal(item) {
   tempOrder.value = { ...item };
-  const delComponent = this.$refs.delModal;
-  delComponent.showModal();
+  delModal.value.myModal_show();
 }
 
 async function updatePaid(item) {
@@ -51,12 +53,11 @@ async function delOrder() {
   isLoading.value = true;
   const res = await api.put(`api/karabo-api-cake/admin/order/${tempOrder.value.id}`)
   console.log( res);
-  const delComponent = this.$refs.delModal;
-  delComponent.hideModal();
+  delModal.value.myModal_hide();
   getOrders(current_Page.value);
-    }
+  }
 
-
+  getOrders()
 </script>
 
 
@@ -113,8 +114,8 @@ async function delOrder() {
     </tbody>
   </table>
   <OrderModal :order="tempOrder"
-              ref="orderModal" @update-paid="updatePaid"></OrderModal>
+              ref="orderModal" @update-order="updatePaid"></OrderModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal>
-  <Pagination :pages="pagination" @emit-pages="getOrders"></Pagination>
+  <Pagination :pages="pagination" @update-Page="getOrders"></Pagination>
 </template>
 
