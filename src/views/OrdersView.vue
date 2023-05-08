@@ -14,27 +14,25 @@ const isLoading=ref(false)
 const tempOrder=ref({})
 const current_Page=ref(1)
 
-function getOrders(currentPage = 1){
+async function getOrders(currentPage = 1){
   current_Page.value = currentPage;
-  const res = api.get(`api/karabo-api-cake/admin/orders?page=${currentPage}`)
+  const res = await api.get(`api/karabo-api-cake/admin/orders?page=${ current_Page.value}`)
+   console.log(res)
   isLoading.value = true;
   orders.value = res.data.orders;
   pagination.value = res.data.pagination;
-  isLoading.value = false;
- 
+  isLoading.value = false; 
 }
 
-
-
-
-function openModal(item) {
+function openModal(isNew,item) {
   tempOrder.value = { ...item };
-  is_New.value = false;
+  is_New.value = isNew;
   orderModal.value.myModal_show();
  }
 
 function openDelOrderModal(item) {
   tempOrder.value = { ...item };
+  console.log(tempOrder.value)
   delModal.value.myModal_show();
 }
 
@@ -51,7 +49,7 @@ async function updatePaid(item) {
 
 async function delOrder() {
   isLoading.value = true;
-  const res = await api.put(`api/karabo-api-cake/admin/order/${tempOrder.value.id}`)
+  const res = await api.delete(`api/karabo-api-cake/admin/order/${tempOrder.value.id}`)
   console.log( res);
   delModal.value.myModal_hide();
   getOrders(current_Page.value);
@@ -113,8 +111,7 @@ async function delOrder() {
       </template>
     </tbody>
   </table>
-  <OrderModal :order="tempOrder"
-              ref="orderModal" @update-order="updatePaid"></OrderModal>
+  <OrderModal :order="tempOrder" ref="orderModal" @update-order="updatePaid"></OrderModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal>
   <Pagination :pages="pagination" @update-Page="getOrders"></Pagination>
 </template>

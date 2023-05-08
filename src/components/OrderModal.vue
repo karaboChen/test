@@ -40,6 +40,7 @@ const props = defineProps({
 watch(
   () => props.order, 
   () => {
+    
     tempOrder.value=props.order
     isPaid.value = tempOrder.value.is_paid;
   },

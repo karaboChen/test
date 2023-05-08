@@ -86,12 +86,14 @@ const form = ref({
 async function createOrder() {
   try {
     const order = form.value;
-    await api.post(`api/karabo-api-cake/order`, { data: order })
+  const res = await api.post(`api/karabo-api-cake/order`, { data: order })
+  let id = res.data.orderId
     form.value.message=""
     form.value.user.name=""
     form.value.user.email=""
     form.value.user.tel=""
     form.value.user.address=""
+    router.push(`/user/checkout/${id}`);
 
   } catch (error) {
     console.log(error)
