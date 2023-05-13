@@ -1,4 +1,5 @@
 {
+  "homepage": "https://karaboChen.github.io/test",
   "name": "test",
   "version": "0.0.0",
   "private": true,
@@ -16,7 +17,6 @@
     "bootstrap-icons": "^1.10.5",
     "mitt": "^3.0.0",
     "pinia": "^2.0.32",
-    "swiper": "^9.2.4",
     "vee-validate": "^4.8.6",
     "vue": "^3.2.47",
     "vue-axios": "^3.5.2",

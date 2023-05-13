@@ -13,7 +13,8 @@ const logout = () => {
 
 const lists = reactive({
   list_index :ref(0),
-  list:[{name:'產品',link:'/dash/products'},{name:'訂單',link:'/dash/orders'},{name:'優惠券',link:'/dash/coupons'}],
+  list:[{name:'產品',link:'/dash/products'},{name:'訂單',link:'/dash/orders'}
+       ,{name:'優惠券',link:'/dash/coupons'},{name:'文章',link:'/dash/article'}],
   currency_index(idx){lists.list_index=idx}
 })
 

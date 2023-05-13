@@ -8,7 +8,7 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => ['swiper-container','swiper-slide'].includes(tag),
+          
         }
       }
     })
@@ -16,7 +16,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@swiper': fileURLToPath(new URL('./node_modules/swiper',import.meta.url)),
     }
   },
   css: {

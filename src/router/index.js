@@ -5,7 +5,8 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',  
+      path: '/',
+      component: () => import('../views/ho-me.vue'),
     },
     {
       path: '/user',
@@ -58,6 +59,10 @@ const router = createRouter({
           path: 'coupons',
           component: () => import('../views/CouPons.vue'),
         },
+        {
+          path: 'article',
+          component: () => import('../views/ArtiCle.vue'),
+        }
       ]
     },
   ]

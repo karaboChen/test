@@ -7,7 +7,6 @@ import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import App from './App.vue'
 import router from './router'
-import { register } from 'swiper/element/bundle';
 import { currency,date } from './method/calc';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,7 +19,6 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 
 const app = createApp(App)
-app.use(register);
 //加入全域使用方法
 app.config.globalProperties.$filters = {
   currency,date

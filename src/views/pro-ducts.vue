@@ -1,5 +1,6 @@
 <script setup>
 import Pagination from'../components/PagiNation.vue'
+import Navbar from '@/components/Nav-bar.vue'
 import api from '../api/backend.js'
 import product from '../components/Product-modal.vue'
 import DelModal from '@/components/DelModal.vue';
@@ -92,6 +93,7 @@ await Getproducts()
 
 <template>
   <Load-ing :active="isLoading"></Load-ing>
+  <Navbar/>
   <div class="text-end mt-3">
     <button class="btn btn-primary" type="button" @click="newItem(true)">
       增加一個產品
