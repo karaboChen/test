@@ -1,1 +1,0 @@
-import{_ as e,o as _,c}from"./index-cc47edcd.js";const o={},s={class:"red"};function t(a,n){return _(),c("h1",s,"測試用")}const d=e(o,[["render",t],["__scopeId","data-v-baa50196"]]);export{d as default};
