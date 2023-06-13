@@ -5,11 +5,13 @@ import NewArticle from '@/components/NewArticle.vue'
 const page=ref(1)
 const temp_article=ref({})
 const new_article=ref()
+const temp_today = ref(null)
 //讀取全部文章
 async function getArticle(Page=1){
   try {
-    page.value=Page
-     await api.get(`api/karabo-api-cake/admin/articles?page=${page.value}`)
+     page.value=Page
+    const res= await api.get(`api/karabo-api-cake/admin/articles?page=${page.value}`)
+    console.log(res)
   } catch (error) {
     console.log(error)
   }
@@ -17,16 +19,19 @@ async function getArticle(Page=1){
 //新增文章
 async function addArticle(item){
   try {
+    console.log(item)
     temp_article.value=item
-    await api.post(`api/karabo-api-cake/admin/article`,{data:temp_article})
-    
+   const res = await api.post(`api/karabo-api-cake/admin/article`,{data:temp_article.value})
+   console.log(res)
     await  getArticle()
+    new_article.value.myModal_hide()
   } catch (error) {
     console.log(error)
   }
 }
 function open(){
   new_article.value.myModal_show()
+  temp_today.value= new Date().getTime() / 1000
 }
 
 getArticle()
@@ -54,7 +59,7 @@ getArticle()
       </div>
     </div>
   </div>
-  <NewArticle ref="new_article"  @update-article=addArticle />
+  <NewArticle ref="new_article"  @update-article="addArticle" :temp_time="temp_today" />
 </template>
 
 <style scoped>

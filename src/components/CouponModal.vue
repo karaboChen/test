@@ -38,7 +38,7 @@ watch(
   () => {
     tempCoupon.value=props.coupon
     const dateAndTime = new Date(tempCoupon.value.due_date * 1000).toISOString().split('T');
-  due_date.value = dateAndTime[0];
+    due_date.value = dateAndTime[0];
   },
   { deep: true }
 );
@@ -101,7 +101,7 @@ watch(
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary"
-                  @click="UpdateCoupon">更新文章
+                  @click="UpdateCoupon">更新優惠券
           </button>
         </div>
       </div>

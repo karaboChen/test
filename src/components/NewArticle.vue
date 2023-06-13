@@ -1,10 +1,10 @@
 <script setup>
 import Modal from 'bootstrap/js/dist/modal';
-import {ref,watch,onMounted} from 'vue'
+import {ref,onMounted,watch} from 'vue'
 const modal = ref(null); //底下的模板
 const myModal = ref({}) //回傳物件
 const Article=ref({})
-const time= ref(null)
+const due_date= ref(null)
 const myModal_show = () => {
   myModal.value.show()
 }
@@ -27,13 +27,32 @@ function UpdateArticle() {
   emits('update-article', Article.value);
 }
 
+const props = defineProps({
+  temp_time: {
+    type: Number,
+  }
+})
+
+
 watch(
-  () => time.value, 
-  () => {
-    Article.value.create_at = Math.floor(new Date(time.value) / 1000);
+  () => props.temp_time, 
+  () => { 
+    const dateAndTime = new Date(props.temp_time * 1000).toISOString().split('T');
+    due_date.value = dateAndTime[0];
   },
   { deep: true }
 );
+
+watch(
+  () => due_date.value, 
+  () => {
+    Article.value.create_at = Math.floor(new Date(due_date.value) / 1000);
+  },
+  { deep: true }
+);
+
+
+
 
 </script>
 
@@ -44,7 +63,7 @@ watch(
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">新增文章</h5>
+          <h5 class="modal-title" id="exampleModalLabel">文章</h5>
           <button type="button" class="btn-close"
                   data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -55,40 +74,38 @@ watch(
                    placeholder="請輸入標題">
           </div>
           <div class="mb-3">
-            <label for="coupon_code">簡略心得</label>
-            <input type="text" class="form-control" id="coupon_code" v-model="Article.description"
-                   placeholder="請輸入大概意思">
+            <label for="description">內容</label>
+             <textarea class="form-control" v-model="Article.description" required  id="description"></textarea>
           </div>
           <div class="mb-3">
-            <label for="coupon_detail">詳細描述</label>
-            <textarea v-model="Article.content" placeholder="請描述最真誠的想法"></textarea>
+            <label for="image">圖片</label>
+            <input type="text" class="form-control"  v-model="Article.image" id="image">
           </div>
           <div class="mb-3">
-            <label for="due_date">發表時間</label>
-            <input type="date" class="form-control" id="due_date"
-                   v-model="time">
+            <label for="tag">標籤</label>
+            <input type="text" class="form-control" v-model="Article.tag" required id="tag">
+          </div>
+          <div>
+           <label for="create_at">建立時間</label>
+           <input  class="form-control" type="date" v-model="due_date" required id="create_at">
           </div>
           <div class="mb-3">
-            <label for="price">管理人</label>
-            <input type="text" class="form-control" id="price"
-                   v-model="Article.author" placeholder="請輸入名字">
+            <label for="author">作者</label>
+            <input type="text" class="form-control" v-model="Article.author" required id="author">
           </div>
           <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox"
-                     :true-value="1"
-                     :false-value="0"
-                     v-model="Article.isPublic" id="is_enabled">
-              <label class="form-check-label" for="is_enabled">
-                是否公開
-              </label>
-            </div>
+            <label for="isPublic">是否公開</label>
+            <input type="checkbox" v-model="Article.isPublic" id="isPublic">
+          </div>
+          <div class="mb-3">
+            <label for="content">內容</label>
+             <textarea class="form-control"   v-model="Article.content" required id="content"></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary"
-                  @click="UpdateArticle">更新優惠券
+                  @click="UpdateArticle">更新文章
           </button>
         </div>
       </div>

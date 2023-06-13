@@ -5,6 +5,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/DemoView',
+      component: () => import('../views/DemoView.vue'),
+    },
+    {
       path: '/',
       component: () => import('../views/ho-me.vue'),
     },
