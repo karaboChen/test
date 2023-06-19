@@ -1,1 +1,0 @@
-import{_ as t,u as a,o as _,c as p,a as c,F as d,p as n,d as r}from"./index-ad2ebd01.js";const u=e=>(n("data-v-30bda05c"),e=e(),r(),e),h=u(()=>c("h1",{class:"red"},"測試用",-1)),l={__name:"ho-me",setup(e){const o=a();function s(){o.push("/dash/products")}return(i,m)=>(_(),p(d,null,[h,c("button",{onClick:s},"ccc")],64))}},b=t(l,[["__scopeId","data-v-30bda05c"]]);export{b as default};

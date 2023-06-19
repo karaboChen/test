@@ -1,0 +1,1 @@
+import{u as o,o as s,c as a,a as e,F as r}from"./index-150f1a48.js";const n=e("h1",{class:"red"},"測試用",-1),m={__name:"ho-me",setup(u){const c=o();function t(){c.push("/dash/products")}return(_,l)=>(s(),a(r,null,[n,e("button",{onClick:t},"ccc")],64))}};export{m as default};
